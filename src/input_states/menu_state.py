@@ -1,24 +1,22 @@
-from instagram_private_api import Client
-
-from input_state import InputState
+from input_states import followers_unshared_state, login_state
 from input_states.abstract_input_state import AbstractInputState
 
 
 class MenuInputState(AbstractInputState):
     def list_info(self):
-        print("\nChoose one of the following options:",
-              "\n\t1. List people who don't follow you back.",
-              "\n\t2. List people who you don't follow back.",
-              "\n\t3. List dead accounts that you follow.",
-              "\n\t4. List dead accounts that follow you.",
-              "\n\t5. Log out.")
+        self.console.print("\nChoose one of the following options:", style="light_salmon3")
+        self.console.print("\t1. List people who don't follow you back."
+                           "\n\t2. List people who you don't follow back."
+                           "\n\t3. List dead accounts that you follow."
+                           "\n\t4. List dead accounts that follow you."
+                           "\n\t5. Log out.")
 
-    def handle_input(self, prefix, input_state, client) -> (InputState, Client):
+    def handle_input(self, prefix, curr_input_state, client):
         response = input(prefix)
 
         if response == "1":
-            return InputState.FOLLOWERS_UNSHARED, client
+            return followers_unshared_state.FollowersUnsharedInputState(), client
         elif response == "5":
-            return InputState.LOGIN, client
+            return login_state.LoginInputState(), client
 
-        return input_state, client
+        return curr_input_state, client
