@@ -11,8 +11,8 @@ class FollowersUnsharedInputState(AbstractInputState):
     unshared: list = []
 
     def on_enter(self, curr_input_state, client):
-        self.console.print("\nLooking for people who don't follow you back."
-                           "\nComparing following with followers...")
+        self.console.print("\nLooking for people who don't follow you back.", style="light_salmon3")
+        self.console.print("Comparing following with followers...")
 
         try:
             following = client.user_following(client.authenticated_user_id, client.generate_uuid()).get("users")
@@ -44,9 +44,9 @@ class FollowersUnsharedInputState(AbstractInputState):
         response = input(prefix)
 
         if response == "1":
-            list_account_entries(self.unshared, "\t")
+            list_account_entries(self.unshared)
         elif response == "2":
-            list_account_entries(self.unshared, "\t", client)
+            list_account_entries(self.unshared, client)
         elif response == "6":
             return menu_state.MenuInputState(), client
 
