@@ -8,7 +8,7 @@ class AbstractInputState(abc.ABC):
     def __init__(self):
         self.console = Console()
 
-    def on_enter(self, curr_input_state, client: Client):
+    def on_enter(self, prefix: str, curr_input_state, client: Client):
         return curr_input_state, client
 
     @abc.abstractmethod

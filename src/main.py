@@ -37,7 +37,7 @@ def switch_input_state(new_input_state):
     elif isinstance(input_state,  followers_unshared_state.FollowersUnsharedInputState):
         prefix = "(menu/followers_unshared): "
 
-    handle_input(*input_state.on_enter(input_state, client))
+    handle_input(*input_state.on_enter(prefix, input_state, client))
 
 
 if __name__ == "__main__":

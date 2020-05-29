@@ -1,5 +1,6 @@
 from input_states import followers_unshared_state, login_state
 from input_states.abstract_input_state import AbstractInputState
+from input_helper import do_input_loop
 
 
 class MenuInputState(AbstractInputState):
@@ -12,11 +13,11 @@ class MenuInputState(AbstractInputState):
                            "\n\t5. Log out.")
 
     def handle_input(self, prefix, curr_input_state, client):
-        response = input(prefix)
+        response = do_input_loop(prefix, range(5))
 
-        if response == "1":
+        if response == 1:
             return followers_unshared_state.FollowersUnsharedInputState(), client
-        elif response == "5":
+        elif response == 5:
             return login_state.LoginInputState(), client
 
         return curr_input_state, client
