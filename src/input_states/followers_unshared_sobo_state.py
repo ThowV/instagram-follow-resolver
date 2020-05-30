@@ -24,6 +24,7 @@ class FollowersUnsharedSOBOInputState(AbstractInputState):
                     list_account_entries([account], client, i + 1)
                 elif response == 2:
                     client.friendships_destroy(account.get("pk"))
+                    followers_unshared_state.unshared.remove(account)
                 elif response == 3:
                     continue
                 elif response == 4:
