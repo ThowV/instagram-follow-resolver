@@ -95,10 +95,10 @@ def get_account_info(account) -> list:
 def get_extended_account_info(account, client: Client) -> list:
     try:
         account_extended = client.user_info(account.get("pk")).get("user")
-        followers = str(account_extended.get("follower_count"))
-        following = str(account_extended.get("following_count"))
+        follower_count = str(account_extended.get("follower_count"))
+        following_count = str(account_extended.get("following_count"))
         biography = str(account_extended.get("biography"))
-        return [followers, following, biography]
+        return [follower_count, following_count, biography]
     except ClientThrottledError:
         return []
 

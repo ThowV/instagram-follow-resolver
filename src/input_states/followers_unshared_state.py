@@ -1,7 +1,7 @@
 from instagram_private_api import ClientThrottledError
 from rich.progress import Progress
 
-from input_states import menu_state, followers_unshared_sobo_state
+from input_states import menu_state, followers_unshared_sobo_state, followers_unshared_removeall_state
 from input_states.abstract_input_state import AbstractInputState
 from account_helper import list_account_entries, get_account_friendships
 from input_helper import do_input_loop
@@ -34,14 +34,15 @@ class FollowersUnsharedInputState(AbstractInputState):
         # Print info
         self.console.print("\nNotice: Here you are presented with 2 options, safe and quick mode."
                            "\n\tThe quick option can be used on accounts with around 600 followers or less."
-                           "\n\tThe safe option can be used on accounts with more than 600 followers."
+                           "\n\tThe safe option should be used on accounts with more than 600 followers."
                            "\n\tThe safe option makes sure you don't make too many API calls.",
+                           "\n\tUse the quick option at your own risk!",
                            style="light_salmon3")
-        self.console.print("\t1. Quick.\n\t2. Safe.")
+        self.console.print("\t1. Safe.\n\t2. Quick.")
 
         # Get response
         response = do_input_loop(prefix, range(2))
-        if response == 1:
+        if response == 2:
             do_delay = False
 
         # Get the following and followers
@@ -58,13 +59,11 @@ class FollowersUnsharedInputState(AbstractInputState):
         with Progress() as progress:
             # Progress bar
             compare_task_length = len(following) * len(followers)
-            compare_task_progress = 0
             compare_task = progress.add_task("Comparing...", total=compare_task_length)
 
             for account in following:
                 for idx, follower in enumerate(followers):
                     # Update the progress bar
-                    compare_task_progress += 1
                     progress.update(compare_task, advance=1)
 
                     # Compare following with follower
@@ -92,6 +91,8 @@ class FollowersUnsharedInputState(AbstractInputState):
             list_account_entries(unshared)
         elif response == 2:
             return followers_unshared_sobo_state.FollowersUnsharedSOBOInputState(), client
+        elif response == 3:
+            return followers_unshared_removeall_state.FollowersUnsharedRemoveAllInputState(), client
         elif response == 4:
             return menu_state.MenuInputState(), client
 
