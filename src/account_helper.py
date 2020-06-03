@@ -141,7 +141,9 @@ def unfollow_accounts(client: Client, accounts: list, do_delay: bool = False):
     with Progress() as progress:
         # Progress bar
         if len(accounts) != 1:
-            compare_task = progress.add_task("Unfollowing...", total=len(accounts))
+            compare_task = progress.add_task("Removing...", total=len(accounts))
+        else:
+            console.print("Removing...")
 
         try:
             for i, account in enumerate(accounts):
@@ -161,6 +163,38 @@ def unfollow_accounts(client: Client, accounts: list, do_delay: bool = False):
                         break
 
                 account_following.remove(to_rem)
+
+                # Update progress
+                if len(accounts) != 1:
+                    progress.update(compare_task, advance=1)
+        except ClientThrottledError:
+            console.print("You made too many API requests, try again later.", style=fail_color)
+
+
+def remove_accounts(client: Client, accounts: list, do_delay: bool = False):
+    with Progress() as progress:
+        # Progress bar
+        if len(accounts) != 1:
+            compare_task = progress.add_task("Removing...", total=len(accounts))
+
+        try:
+            for i, account in enumerate(accounts):
+                # Sleep so we don't do too many API calls
+                if do_delay:
+                    sleep(3)
+
+                # Unfollow account
+                client.remove_follower(account.get("pk"))
+
+                # Remove account from data
+                to_rem = None
+
+                for follower in account_followers:
+                    if follower.get("pk") == account.get("pk"):
+                        to_rem = follower
+                        break
+
+                account_followers.remove(to_rem)
 
                 # Update progress
                 if len(accounts) != 1:
