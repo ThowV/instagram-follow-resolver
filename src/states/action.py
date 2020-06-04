@@ -1,10 +1,10 @@
 from instagram_private_api import Client
 
 import account_helper
+import input_helper
 from actions import following_unshared, followers_unshared
 
-from input_helper import do_input_loop, request_do_delay, request_extra_confirmation
-from main import console, base_color, fail_color
+from main import console, base_color
 from states import menu
 
 prefix = "(menu): "
@@ -35,7 +35,7 @@ def input(client: Client):
                   "\n\t3. Remove all. (This could result in many API calls.)"
                   "\n\t4. Return.")
 
-    response = do_input_loop(prefix, range(4))
+    response = input_helper.do_input_loop(prefix, range(4))
 
     if response == 1:
         list_all()
@@ -57,33 +57,30 @@ def list_all():
 
 def show_obo(client: Client):
     for i, account in enumerate(unshared):
-        account_helper.list_accounts([account], forced_idx=i + 1)
+        account_helper.list_accounts([account], forced_idx="{} / {}".format(i + 1, len(unshared)))
 
         while True:
             console.print("\t1. Get extended information.\n\t2. Remove.\n\t3. Next. \n\t4. Return")
 
-            response = do_input_loop(prefix, range(4))
+            response = input_helper.do_input_loop(prefix, range(4))
             if response == 1:
-                account_helper.list_accounts([account], client, i + 1)
+                account_helper.list_accounts([account], client, "{} / {}".format(i + 1, len(unshared)))
             elif response == 2:
                 if menu.action_idx == 1:
                     account_helper.unfollow_accounts(client, [account])
                 elif menu.action_idx == 2:
                     account_helper.remove_accounts(client, [account])
+
                 break
-            elif response == 3:
-                break
-            elif response == 4:
-                return
 
 
 def remove_all(client: Client):
     # Request confirmation
-    confirmation = request_extra_confirmation(prefix)
+    confirmation = input_helper.request_extra_confirmation(prefix)
 
     if confirmation:
         # Request do delay
-        do_delay = request_do_delay(prefix)
+        do_delay = input_helper.request_do_delay(prefix)
 
         console.print("\nRemoving all accounts.", style=base_color)
 

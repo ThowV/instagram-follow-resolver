@@ -66,7 +66,7 @@ def collect_account_friendships(client: Client = None, do_delay: bool = True):
         menu.start(client)
 
 
-def list_accounts(accounts: list, client: Client = None, forced_idx: int = None):
+def list_accounts(accounts: list, client: Client = None, forced_idx: str = None):
     table = create_table(client)
 
     # Add table content
@@ -74,7 +74,7 @@ def list_accounts(accounts: list, client: Client = None, forced_idx: int = None)
         if not forced_idx:
             account_info = [str(i + 1)]
         else:
-            account_info = [str(forced_idx)]
+            account_info = [forced_idx]
 
         account_info.extend(get_account_info(account))
         if client is not None:

@@ -21,12 +21,16 @@ def start():
             if password == ":quit":
                 sys.exit()
 
+            console.log("---{}---".format(username))
+            console.log("...{}...".format(password))
+
             console.print("\tLogging in...")
             client = Client(username, password)
             console.print("\tLogin successful!", style=success_color)
 
             menu.start(client)
-        except ClientLoginError:
+        except ClientLoginError as e:
+            console.print(e)
             console.print("\tUsername or password were incorrect, try again.", style=fail_color)
         except ClientError:
             console.print("\tYou made too many API requests, try again later.", style=fail_color)
