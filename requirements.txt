@@ -2,6 +2,6 @@ colorama==0.4.3
 commonmark==0.9.1
 instagram-private-api==1.6.0
 pprintpp==0.4.0
-Pygments==2.6.1
+Pygments==2.7.4
 rich==1.1.9
 typing-extensions==3.7.4.2
